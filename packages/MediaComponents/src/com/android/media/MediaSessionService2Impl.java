@@ -38,7 +38,7 @@ import android.util.Log;
 public class MediaSessionService2Impl implements MediaSessionService2Provider {
 
     private static final String TAG = "MPSessionService"; // to meet 23 char limit in Log tag
-    private static final boolean DEBUG = true; // TODO(jaewan): Change this. (b/74094611)
+    private static final boolean DEBUG = false;
 
     private final MediaSessionService2 mInstance;
     private final PlayerEventCallback mCallback = new SessionServiceEventCallback();

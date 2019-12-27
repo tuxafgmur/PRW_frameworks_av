@@ -61,7 +61,7 @@ public class MediaSession2Stub extends IMediaSession2.Stub {
             "android.media.media_session2.key_playlist_params";
 
     private static final String TAG = "MediaSession2Stub";
-    private static final boolean DEBUG = true; // TODO(jaewan): Rename.
+    private static final boolean DEBUG = false;
 
     private static final SparseArray<SessionCommand2> sCommandsForOnCommandRequest =
             new SparseArray<>();

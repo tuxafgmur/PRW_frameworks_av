@@ -33,7 +33,7 @@ import java.util.concurrent.Executor;
 
 public class MediaBrowser2Impl extends MediaController2Impl implements MediaBrowser2Provider {
     private final String TAG = "MediaBrowser2";
-    private final boolean DEBUG = true; // TODO(jaewan): change.
+    private final boolean DEBUG = false;
 
     private final MediaBrowser2 mInstance;
     private final MediaBrowser2.BrowserCallback mCallback;
@@ -61,8 +61,6 @@ public class MediaBrowser2Impl extends MediaController2Impl implements MediaBrow
                     Log.w(TAG, "Cannot connect to the service or the session is gone", e);
                 }
             }
-        } else {
-            Log.w(TAG, "Session isn't active", new IllegalStateException());
         }
     }
 
@@ -82,8 +80,6 @@ public class MediaBrowser2Impl extends MediaController2Impl implements MediaBrow
                     Log.w(TAG, "Cannot connect to the service or the session is gone", e);
                 }
             }
-        } else {
-            Log.w(TAG, "Session isn't active", new IllegalStateException());
         }
     }
 
@@ -103,8 +99,6 @@ public class MediaBrowser2Impl extends MediaController2Impl implements MediaBrow
                     Log.w(TAG, "Cannot connect to the service or the session is gone", e);
                 }
             }
-        } else {
-            Log.w(TAG, "Session isn't active", new IllegalStateException());
         }
     }
 
@@ -124,8 +118,6 @@ public class MediaBrowser2Impl extends MediaController2Impl implements MediaBrow
                     Log.w(TAG, "Cannot connect to the service or the session is gone", e);
                 }
             }
-        } else {
-            Log.w(TAG, "Session isn't active", new IllegalStateException());
         }
     }
 
@@ -148,8 +140,6 @@ public class MediaBrowser2Impl extends MediaController2Impl implements MediaBrow
                     Log.w(TAG, "Cannot connect to the service or the session is gone", e);
                 }
             }
-        } else {
-            Log.w(TAG, "Session isn't active", new IllegalStateException());
         }
     }
 
@@ -168,8 +158,6 @@ public class MediaBrowser2Impl extends MediaController2Impl implements MediaBrow
                     Log.w(TAG, "Cannot connect to the service or the session is gone", e);
                 }
             }
-        } else {
-            Log.w(TAG, "Session isn't active", new IllegalStateException());
         }
     }
 
@@ -191,8 +179,6 @@ public class MediaBrowser2Impl extends MediaController2Impl implements MediaBrow
                     Log.w(TAG, "Cannot connect to the service or the session is gone", e);
                 }
             }
-        } else {
-            Log.w(TAG, "Session isn't active", new IllegalStateException());
         }
     }
 

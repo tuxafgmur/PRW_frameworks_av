@@ -30,7 +30,7 @@ import static android.widget.VideoView2.VIEW_TYPE_SURFACEVIEW;
 
 class VideoSurfaceView extends SurfaceView implements VideoViewInterface, SurfaceHolder.Callback {
     private static final String TAG = "VideoSurfaceView";
-    private static final boolean DEBUG = true; // STOPSHIP: Log.isLoggable(TAG, Log.DEBUG);
+    private static final boolean DEBUG = false;
     private SurfaceHolder mSurfaceHolder = null;
     private SurfaceListener mSurfaceListener = null;
     private MediaPlayer2 mMediaPlayer;
@@ -63,7 +63,6 @@ class VideoSurfaceView extends SurfaceView implements VideoViewInterface, Surfac
 
     @Override
     public boolean assignSurfaceToMediaPlayer(MediaPlayer2 mp) {
-        Log.d(TAG, "assignSurfaceToMediaPlayer(): mSurfaceHolder: " + mSurfaceHolder);
         if (mp == null || !hasAvailableSurface()) {
             return false;
         }
@@ -115,7 +114,6 @@ class VideoSurfaceView extends SurfaceView implements VideoViewInterface, Surfac
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        Log.d(TAG, "surfaceCreated: mSurfaceHolder: " + mSurfaceHolder + ", new holder: " + holder);
         mSurfaceHolder = holder;
         if (mIsTakingOverOldView) {
             takeOver(mOldView);

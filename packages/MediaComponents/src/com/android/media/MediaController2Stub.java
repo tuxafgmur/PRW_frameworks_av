@@ -38,7 +38,7 @@ import java.util.List;
 
 public class MediaController2Stub extends IMediaController2.Stub {
     private static final String TAG = "MediaController2Stub";
-    private static final boolean DEBUG = true; // TODO(jaewan): Change
+    private static final boolean DEBUG = false;
 
     private final WeakReference<MediaController2Impl> mController;
 

@@ -33,7 +33,7 @@ import static android.widget.VideoView2.VIEW_TYPE_TEXTUREVIEW;
 class VideoTextureView extends TextureView
         implements VideoViewInterface, TextureView.SurfaceTextureListener {
     private static final String TAG = "VideoTextureView";
-    private static final boolean DEBUG = true; // STOPSHIP: Log.isLoggable(TAG, Log.DEBUG);
+    private static final boolean DEBUG = false;
 
     private SurfaceTexture mSurfaceTexture;
     private Surface mSurface;
@@ -67,7 +67,6 @@ class VideoTextureView extends TextureView
 
     @Override
     public boolean assignSurfaceToMediaPlayer(MediaPlayer2 mp) {
-        Log.d(TAG, "assignSurfaceToMediaPlayer(): mSurfaceTexture: " + mSurfaceTexture);
         if (mp == null || !hasAvailableSurface()) {
             // Surface is not ready.
             return false;
@@ -120,8 +119,6 @@ class VideoTextureView extends TextureView
 
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int width, int height) {
-        Log.d(TAG, "onSurfaceTextureAvailable: mSurfaceTexture: " + mSurfaceTexture
-                + ", new surface: " + surfaceTexture);
         mSurfaceTexture = surfaceTexture;
         mSurface = new Surface(mSurfaceTexture);
         if (mIsTakingOverOldView) {

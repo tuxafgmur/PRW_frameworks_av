@@ -86,7 +86,7 @@ import java.util.concurrent.Executor;
 public class VideoView2Impl extends BaseLayout
         implements VideoView2Provider, VideoViewInterface.SurfaceListener {
     private static final String TAG = "VideoView2";
-    private static final boolean DEBUG = true; // STOPSHIP: Log.isLoggable(TAG, Log.DEBUG);
+    private static final boolean DEBUG = false;
     private static final long DEFAULT_SHOW_CONTROLLER_INTERVAL_MS = 2000;
 
     private final VideoView2 mInstance;
@@ -468,10 +468,8 @@ public class VideoView2Impl extends BaseLayout
         }
         VideoViewInterface targetView;
         if (viewType == VideoView2.VIEW_TYPE_TEXTUREVIEW) {
-            Log.d(TAG, "switching to TextureView");
             targetView = mTextureView;
         } else if (viewType == VideoView2.VIEW_TYPE_SURFACEVIEW) {
-            Log.d(TAG, "switching to SurfaceView");
             targetView = mSurfaceView;
         } else {
             throw new IllegalArgumentException("Unknown view type: " + viewType);
@@ -715,7 +713,6 @@ public class VideoView2Impl extends BaseLayout
         }
 
         try {
-            Log.d(TAG, "openVideo(): creating new MediaPlayer2 instance.");
             mMediaPlayer = new MediaPlayer2Impl();
             mSurfaceView.setMediaPlayer(mMediaPlayer);
             mTextureView.setMediaPlayer(mMediaPlayer);
@@ -1158,7 +1155,6 @@ public class VideoView2Impl extends BaseLayout
                 @Override
                 public void onTimedText(
                         MediaPlayer2 mp, DataSourceDesc dsd, TimedText text) {
-                        Log.d(TAG, "TimedText: " + text.getText());
                 }
 
                 @Override

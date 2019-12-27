@@ -68,7 +68,7 @@ import java.util.concurrent.Executor;
 
 public class MediaController2Impl implements MediaController2Provider {
     private static final String TAG = "MediaController2";
-    private static final boolean DEBUG = true; // TODO(jaewan): Change
+    private static final boolean DEBUG = false;
 
     private final MediaController2 mInstance;
     private final Context mContext;

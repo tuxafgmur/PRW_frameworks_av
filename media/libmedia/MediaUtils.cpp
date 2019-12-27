@@ -15,7 +15,7 @@
  */
 
 #define LOG_TAG "MediaUtils"
-#define LOG_NDEBUG 0
+//#define LOG_NDEBUG 0
 #include <utils/Log.h>
 
 #include <cutils/properties.h>

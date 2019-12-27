@@ -76,7 +76,7 @@ import java.util.concurrent.Executor;
 
 public class MediaSession2Impl implements MediaSession2Provider {
     private static final String TAG = "MediaSession2";
-    private static final boolean DEBUG = true;//Log.isLoggable(TAG, Log.DEBUG);
+    private static final boolean DEBUG = false;
 
     private final Object mLock = new Object();
 
