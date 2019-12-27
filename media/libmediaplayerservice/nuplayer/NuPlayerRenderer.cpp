@@ -565,14 +565,8 @@ void NuPlayer::Renderer::onMessageReceived(const sp<AMessage> &msg) {
                     delayUs /= mPlaybackRate;
                 }
 
-                // Let's give it more data after about half that time
-                // has elapsed.
+                // Let's give it more data after about half that time has elapsed.
                 delayUs /= 2;
-                // check the buffer size to estimate maximum delay permitted.
-                const int64_t maxDrainDelayUs = std::max(
-                        mAudioSink->getBufferDurationInUs(), (int64_t)500000 /* half second */);
-                ALOGD_IF(delayUs > maxDrainDelayUs, "postDrainAudioQueue long delay: %lld > %lld",
-                        (long long)delayUs, (long long)maxDrainDelayUs);
                 Mutex::Autolock autoLock(mLock);
                 postDrainAudioQueue_l(delayUs);
             }
@@ -1129,8 +1123,6 @@ bool NuPlayer::Renderer::onDrainAudioQueue() {
     bool reschedule = !mAudioQueue.empty()
             && (!mPaused
                 || prevFramesWritten != mNumFramesWritten); // permit pause to fill buffers
-    //ALOGD("reschedule:%d  empty:%d  mPaused:%d  prevFramesWritten:%u  mNumFramesWritten:%u",
-    //        reschedule, mAudioQueue.empty(), mPaused, prevFramesWritten, mNumFramesWritten);
     return reschedule;
 }
 

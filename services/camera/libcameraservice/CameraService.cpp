@@ -93,8 +93,8 @@ using hardware::camera::common::V1_0::TorchModeStatus;
 // Use "adb shell dumpsys media.camera -v 1" to change it.
 volatile int32_t gLogLevel = 0;
 
-#define LOG1(...) ALOGD_IF(gLogLevel >= 1, __VA_ARGS__);
-#define LOG2(...) ALOGD_IF(gLogLevel >= 2, __VA_ARGS__);
+#define LOG1(...)
+#define LOG2(...)
 
 static void setLogLevel(int level) {
     android_atomic_write(level, &gLogLevel);
@@ -2099,7 +2099,6 @@ CameraService::Client::Client(const sp<CameraService>& cameraService,
                 servicePid),
         mCameraId(api1CameraId)
 {
-    int callingPid = getCallingPid();
     LOG1("Client::Client E (pid %d, id %d)", callingPid, mCameraId);
 
     mRemoteCallback = cameraClient;

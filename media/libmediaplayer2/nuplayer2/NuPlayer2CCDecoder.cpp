@@ -115,7 +115,6 @@ static void dumpBytePair(const sp<ABuffer> &ccBuf) {
         offset += sizeof(CCData);
     }
 
-    ALOGI("%s", out.c_str());
 }
 
 NuPlayer2::CCDecoder::CCDecoder(const sp<AMessage> &notify)

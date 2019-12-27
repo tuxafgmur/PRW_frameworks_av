@@ -39,7 +39,6 @@ using namespace android;  // TODO just import names needed
 using namespace aaudio;   // TODO just import names needed
 
 AAudioServiceEndpoint::~AAudioServiceEndpoint() {
-    ALOGD("%s(%p) destroyed", __func__, this);
 }
 
 std::string AAudioServiceEndpoint::dump() const {
@@ -93,7 +92,6 @@ void AAudioServiceEndpoint::disconnectRegisteredStreams() {
     std::lock_guard<std::mutex> lock(mLockStreams);
     mConnected.store(false);
     for (const auto stream : mRegisteredStreams) {
-        ALOGD("disconnectRegisteredStreams() stop and disconnect %p", stream.get());
         stream->stop();
         stream->disconnect();
     }

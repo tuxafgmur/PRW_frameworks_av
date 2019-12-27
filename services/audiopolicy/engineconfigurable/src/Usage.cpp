@@ -29,7 +29,6 @@ status_t Element<audio_usage_t>::setIdentifier(audio_usage_t identifier)
         return BAD_VALUE;
     }
     mIdentifier = identifier;
-    ALOGD("%s: Usage %s has identifier 0x%X", __FUNCTION__, getName().c_str(), identifier);
     return NO_ERROR;
 }
 
@@ -39,7 +38,6 @@ status_t Element<audio_usage_t>::set<routing_strategy>(routing_strategy strategy
     if (strategy >= NUM_STRATEGIES) {
         return BAD_VALUE;
     }
-    ALOGD("%s: %d for Usage %s", __FUNCTION__, strategy, getName().c_str());
     mApplicableStrategy = strategy;
     return NO_ERROR;
 }
@@ -47,7 +45,6 @@ status_t Element<audio_usage_t>::set<routing_strategy>(routing_strategy strategy
 template <>
 routing_strategy Element<audio_usage_t>::get<routing_strategy>() const
 {
-    ALOGD("%s: %d for Usage %s", __FUNCTION__, mApplicableStrategy, getName().c_str());
     return mApplicableStrategy;
 }
 

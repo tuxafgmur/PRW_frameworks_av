@@ -899,11 +899,6 @@ void NuPlayer2::onMessageReceived(const sp<AMessage> &msg) {
             CHECK(msg->findObject("surface", &obj));
             sp<ANativeWindowWrapper> nww = static_cast<ANativeWindowWrapper *>(obj.get());
 
-            ALOGD("onSetVideoSurface(%p, %s video decoder)",
-                    (nww == NULL ? NULL : nww->getANativeWindow()),
-                    (mSource != NULL && mStarted && mSource->getFormat(false /* audio */) != NULL
-                            && mVideoDecoder != NULL) ? "have" : "no");
-
             // Need to check mStarted before calling mSource->getFormat because NuPlayer2 might
             // be in preparing state and it could take long time.
             // When mStarted is true, mSource must have been set.
@@ -1579,7 +1574,6 @@ void NuPlayer2::onMessageReceived(const sp<AMessage> &msg) {
 
 void NuPlayer2::onResume() {
     if (!mPaused || mResetting) {
-        ALOGD_IF(mResetting, "resetting, onResume discarded");
         return;
     }
     mPaused = false;
@@ -2166,8 +2160,6 @@ void NuPlayer2::flushDecoder(bool audio, bool needShutdown) {
 
     const sp<DecoderBase> &decoder = getDecoder(audio);
     if (decoder == NULL) {
-        ALOGI("flushDecoder %s without decoder present",
-             audio ? "audio" : "video");
         return;
     }
 
@@ -2201,7 +2193,6 @@ void NuPlayer2::flushDecoder(bool audio, bool needShutdown) {
 
 void NuPlayer2::queueDecoderShutdown(
         bool audio, bool video, const sp<AMessage> &reply) {
-    ALOGI("queueDecoderShutdown audio=%d, video=%d", audio, video);
 
     mDeferredActions.push_back(
             new FlushDecoderAction(
@@ -2435,7 +2426,6 @@ void NuPlayer2::performReset() {
     if (mCrypto != NULL) {
         // decoders will be flushed before this so their mCrypto would go away on their own
         // TODO change to ALOGV
-        ALOGD("performReset mCrypto: %p", mCrypto.get());
         mCrypto.clear();
     }
     mIsDrmProtected = false;
@@ -2488,7 +2478,6 @@ void NuPlayer2::performPlayNextDataSource() {
     if (mCrypto != NULL) {
         // decoders will be flushed before this so their mCrypto would go away on their own
         // TODO change to ALOGV
-        ALOGD("performReset mCrypto: %p", mCrypto.get());
         mCrypto.clear();
     }
     mIsDrmProtected = false;
@@ -2692,8 +2681,6 @@ void NuPlayer2::onSourceNotify(const sp<AMessage> &msg) {
         {
             // ignore if not playing
             if (mStarted) {
-                ALOGI("buffer low, pausing...");
-
                 startRebufferingTimer();
                 mPausedForBuffering = true;
                 onPause();
@@ -2706,8 +2693,6 @@ void NuPlayer2::onSourceNotify(const sp<AMessage> &msg) {
         {
             // ignore if not playing
             if (mStarted) {
-                ALOGI("buffer ready, resuming...");
-
                 stopRebufferingTimer(false);
                 mPausedForBuffering = false;
 
@@ -2975,7 +2960,6 @@ status_t NuPlayer2::releaseDrm()
 status_t NuPlayer2::onPrepareDrm(const sp<AMessage> &msg)
 {
     // TODO change to ALOGV
-    ALOGD("onPrepareDrm ");
 
     status_t status = INVALID_OPERATION;
     if (mSource == NULL) {
@@ -3006,7 +2990,6 @@ status_t NuPlayer2::onPrepareDrm(const sp<AMessage> &msg)
     mCrypto = crypto;
     mIsDrmProtected = true;
     // TODO change to ALOGV
-    ALOGD("onPrepareDrm: mCrypto: %p", mCrypto.get());
 
     return status;
 }
@@ -3014,7 +2997,6 @@ status_t NuPlayer2::onPrepareDrm(const sp<AMessage> &msg)
 status_t NuPlayer2::onReleaseDrm()
 {
     // TODO change to ALOGV
-    ALOGD("onReleaseDrm ");
 
     if (!mIsDrmProtected) {
         ALOGW("onReleaseDrm: Unexpected. mIsDrmProtected is already false.");
@@ -3047,7 +3029,6 @@ status_t NuPlayer2::onReleaseDrm()
         }
 
         // TODO change to ALOGV
-        ALOGD("onReleaseDrm: mCrypto: %p", mCrypto.get());
         mCrypto.clear();
     } else {   // mCrypto == NULL
         ALOGE("onReleaseDrm: Unexpected. There is no crypto.");

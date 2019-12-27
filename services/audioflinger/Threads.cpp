@@ -403,26 +403,6 @@ void CpuStats::sample(const String8 &title
             mCpuUsage.resetElapsed();
             mWcStats.reset();
             mHzStats.reset();
-            ALOGD("CPU usage for %s over past %.1f secs\n"
-                "  (%u mixer loops at %.1f mean ms per loop):\n"
-                "  us per mix loop: mean=%.0f stddev=%.0f min=%.0f max=%.0f\n"
-                "  %% of wall: mean=%.1f stddev=%.1f min=%.1f max=%.1f\n"
-                "  MHz: mean=%.1f, stddev=%.1f, min=%.1f max=%.1f",
-                    title.string(),
-                    elapsed * .000000001, n, perLoop * .000001,
-                    mean * .001,
-                    stddev * .001,
-                    minimum * .001,
-                    maximum * .001,
-                    mean / perLoop100,
-                    stddev / perLoop100,
-                    minimum / perLoop100,
-                    maximum / perLoop100,
-                    meanCycles / perLoop1k,
-                    stddevCycles / perLoop1k,
-                    minCycles / perLoop1k,
-                    maxCycles / perLoop1k);
-
         }
     }
 #endif
@@ -533,11 +513,6 @@ AudioFlinger::ThreadBase::~ThreadBase()
 status_t AudioFlinger::ThreadBase::readyToRun()
 {
     status_t status = initCheck();
-    if (status == NO_ERROR) {
-        ALOGI("AudioFlinger's thread %p tid=%d ready to run", this, getTid());
-    } else {
-        ALOGE("No working audio driver found.");
-    }
     return status;
 }
 
@@ -958,7 +933,6 @@ void AudioFlinger::ThreadBase::updateWakeLockUids_l(const SortedVector<uid_t> &u
     for (uid_t uid : uids) {
         s << uid << " ";
     }
-    ALOGD("updateWakeLockUids_l %s uids:%s", mThreadName, s.str().c_str());
 #endif
 
     if (mWakeLockToken == NULL) { // token may be NULL if AudioFlinger::systemReady() not called.
@@ -1417,10 +1391,6 @@ status_t AudioFlinger::ThreadBase::addEffect_l(const sp<EffectModule>& effect)
     audio_session_t sessionId = effect->sessionId();
     sp<EffectChain> chain = getEffectChain_l(sessionId);
     bool chainCreated = false;
-
-    ALOGD_IF((mType == OFFLOAD) && !effect->isOffloadable(),
-             "addEffect_l() on offloaded thread %p: effect %s does not support offload flags %#x",
-                    this, effect->desc().name, effect->desc().flags);
 
     if (chain == 0) {
         // create a new chain for this session
@@ -2056,13 +2026,6 @@ sp<AudioFlinger::PlaybackThread::Track> AudioFlinger::PlaybackThread::createTrac
             }
         }
         if (notificationFrameCount == 0 || notificationFrameCount > maxNotificationFrames) {
-            if (notificationFrameCount == 0) {
-                ALOGD("Client defaulted notificationFrames to %zu for frameCount %zu",
-                    maxNotificationFrames, frameCount);
-            } else {
-                ALOGW("Client adjusted notificationFrames from %zu to %zu for frameCount %zu",
-                      notificationFrameCount, maxNotificationFrames, frameCount);
-            }
             notificationFrameCount = maxNotificationFrames;
         }
     }
@@ -2572,8 +2535,6 @@ void AudioFlinger::PlaybackThread::readOutputParameters_l()
     if (mType == MIXER || mType == DUPLICATING) {
         mNormalFrameCount = (mNormalFrameCount + 15) & ~15;
     }
-    ALOGI("HAL output buffer size %zu frames, normal sink buffer size %zu frames", mFrameCount,
-            mNormalFrameCount);
 
     // Check if we want to throttle the processing to no more than 2x normal rate
     mThreadThrottle = property_get_bool("af.thread.throttle", true /* default_value */);
@@ -2801,14 +2762,12 @@ void AudioFlinger::PlaybackThread::checkSilentMode_l()
     if (!mMasterMute) {
         char value[PROPERTY_VALUE_MAX];
         if (mOutDevice == AUDIO_DEVICE_OUT_REMOTE_SUBMIX) {
-            ALOGD("ro.audio.silent will be ignored for threads on AUDIO_DEVICE_OUT_REMOTE_SUBMIX");
             return;
         }
         if (property_get("ro.audio.silent", value, "0") > 0) {
             char *endptr;
             unsigned long ul = strtoul(value, &endptr, 0);
             if (*endptr == '\0' && ul != 0) {
-                ALOGD("Silence is golden");
                 // The setprop command will not allow a property to be changed after
                 // the first time it is set, so we don't have to worry about un-muting.
                 setMasterMute_l(true);
@@ -3521,11 +3480,6 @@ bool AudioFlinger::PlaybackThread::threadLoop()
                         } else {
                             uint32_t diff = mThreadThrottleTimeMs - mThreadThrottleEndMs;
                             if (diff > 0) {
-                                // notify of throttle end on debug log
-                                // but prevent spamming for bluetooth
-                                ALOGD_IF(!audio_is_a2dp_out_device(outDevice()) &&
-                                         !audio_is_hearing_aid_out_device(outDevice()),
-                                        "mixer(%p) throttle end: throttle time(%u)", this, diff);
                                 mThreadThrottleEndMs = mThreadThrottleTimeMs;
                             }
                         }
@@ -6690,8 +6644,6 @@ reacquire_wakelock:
                 // as the read obtains a lock, preventing the timestamp call from executing.
             }
         }
-        // Use this to track timestamp information
-        // ALOGD("%s", mTimestamp.toString().c_str());
 
         if (framesRead < 0 || (framesRead == 0 && mPipeSource == 0)) {
             ALOGE("read failed: framesRead=%zd", framesRead);
@@ -8831,7 +8783,6 @@ void AudioFlinger::MmapPlaybackThread::checkSilentMode_l()
             char *endptr;
             unsigned long ul = strtoul(value, &endptr, 0);
             if (*endptr == '\0' && ul != 0) {
-                ALOGD("Silence is golden");
                 // The setprop command will not allow a property to be changed after
                 // the first time it is set, so we don't have to worry about un-muting.
                 setMasterMute_l(true);

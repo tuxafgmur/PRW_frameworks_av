@@ -34,8 +34,8 @@
 #include "api1/client2/CallbackProcessor.h"
 #include "api1/client2/ZslProcessor.h"
 
-#define ALOG1(...) ALOGD_IF(gLogLevel >= 1, __VA_ARGS__);
-#define ALOG2(...) ALOGD_IF(gLogLevel >= 2, __VA_ARGS__);
+#define ALOG1(...)
+#define ALOG2(...)
 
 namespace android {
 using namespace camera2;
@@ -146,9 +146,6 @@ status_t Camera2Client::initializeImpl(TProviderPtr providerPtr, const String8& 
 
     if (gLogLevel >= 1) {
         SharedParameters::Lock l(mParameters);
-        ALOGD("%s: Default parameters converted from camera %d:", __FUNCTION__,
-              mCameraId);
-        ALOGD("%s", l.mParameters.paramsFlattened.string());
     }
 
     return OK;
@@ -515,7 +512,6 @@ status_t Camera2Client::unlock() {
         SharedParameters::Lock l(mParameters);
         if (l.mParameters.state == Parameters::RECORD ||
                 l.mParameters.state == Parameters::VIDEO_SNAPSHOT) {
-            ALOGD("Not allowed to unlock camera during recording.");
             return INVALID_OPERATION;
         }
         mClientPid = 0;

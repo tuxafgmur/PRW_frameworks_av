@@ -76,7 +76,6 @@ public:
             return BAD_VALUE;
         }
         (*this)[key] = new T(name);
-        ALOGD("%s: adding element %s to collection", __FUNCTION__, name.c_str());
         return (*this)[key]->setIdentifier(key);
     }
 

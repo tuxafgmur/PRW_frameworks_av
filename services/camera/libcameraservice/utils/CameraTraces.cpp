@@ -59,7 +59,6 @@ void CameraTraces::saveTrace() {
         pcs.log(LOG_TAG, ANDROID_LOG_VERBOSE);
     }
 
-    ALOGD("Process trace saved. Use dumpsys media.camera to view.");
 
     ATRACE_END();
 }

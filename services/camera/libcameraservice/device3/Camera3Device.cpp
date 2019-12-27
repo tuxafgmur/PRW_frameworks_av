@@ -2586,7 +2586,6 @@ status_t Camera3Device::configureStreamsLocked(int operatingMode,
             ALOGW("Can't set realtime priority for request processing thread: %s (%d)",
                     strerror(-res), res);
         } else {
-            ALOGD("Set real time priority for request queue thread (tid %d)", requestThreadTid);
         }
     }
 

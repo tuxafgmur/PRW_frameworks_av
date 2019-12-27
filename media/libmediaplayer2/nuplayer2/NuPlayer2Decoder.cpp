@@ -247,7 +247,6 @@ void NuPlayer2::Decoder::onMessageReceived(const sp<AMessage> &msg) {
                                                    NATIVE_WINDOW_API_MEDIA);
                 if (err == OK) {
                     err = mCodec->setOutputSurface(nww);
-                    ALOGI_IF(err, "codec setOutputSurface returned: %d", err);
                     if (err == OK) {
                         // reconnect to the old surface as MPS::Client will expect to
                         // be able to disconnect from it.
@@ -311,7 +310,6 @@ void NuPlayer2::Decoder::onConfigure(const sp<AMessage> &format) {
             if (mCodec->getName(&mComponentName) == OK) {
                 mComponentName.append(".secure");
                 mCodec->release();
-                ALOGI("[%s] creating", mComponentName.c_str());
                 mCodec = AMediaCodecWrapper::CreateCodecByName(mComponentName);
             } else {
                 mCodec = NULL;
@@ -701,7 +699,6 @@ bool NuPlayer2::Decoder::handleAnInputBuffer(size_t index) {
         msg->setSize("buffer-ix", index);
 
         sp<ABuffer> buffer = mCSDsToSubmit.itemAt(0);
-        ALOGI("[%s] resubmitting CSD", mComponentName.c_str());
         msg->setBuffer("buffer", buffer);
         mCSDsToSubmit.removeAt(0);
         if (!onInputBufferFetched(msg)) {
@@ -775,8 +772,6 @@ bool NuPlayer2::Decoder::handleAnOutputBuffer(
     reply->setInt32("generation", mBufferGeneration);
 
     if (eos) {
-        ALOGI("[%s] saw output EOS", mIsAudio ? "audio" : "video");
-
         buffer->meta()->setInt32("eos", true);
         reply->setInt32("eos", true);
     }
@@ -895,9 +890,6 @@ status_t NuPlayer2::Decoder::fetchInputData(sp<AMessage> &reply) {
                             (type & ATSParser::DISCONTINUITY_VIDEO_FORMAT));
 
                 bool timeChange = (type & ATSParser::DISCONTINUITY_TIME) != 0;
-
-                ALOGI("%s discontinuity (format=%d, time=%d)",
-                        mIsAudio ? "audio" : "video", formatChange, timeChange);
 
                 bool seamlessFormatChange = false;
                 sp<AMessage> newFormat = mSource->getFormat(mIsAudio);
@@ -1047,8 +1039,6 @@ bool NuPlayer2::Decoder::onInputBufferFetched(const sp<AMessage> &msg) {
             int64_t resumeAtMediaTimeUs;
             if (extra->findInt64(
                         "resume-at-mediaTimeUs", &resumeAtMediaTimeUs)) {
-                ALOGI("[%s] suppressing rendering until %lld us",
-                        mComponentName.c_str(), (long long)resumeAtMediaTimeUs);
                 mSkipRenderingUntilMediaTimeUs = resumeAtMediaTimeUs;
             }
         }

@@ -32,7 +32,6 @@ status_t Element<audio_stream_type_t>::setIdentifier(audio_stream_type_t identif
         return BAD_VALUE;
     }
     mIdentifier = identifier;
-    ALOGD("%s: Stream %s identifier 0x%X", __FUNCTION__, getName().c_str(), identifier);
     return NO_ERROR;
 }
 
@@ -51,7 +50,6 @@ status_t Element<audio_stream_type_t>::set<routing_strategy>(routing_strategy st
         return BAD_VALUE;
     }
     mApplicableStrategy = strategy;
-    ALOGD("%s: 0x%X for Stream %s", __FUNCTION__, strategy, getName().c_str());
     return NO_ERROR;
 }
 
@@ -69,7 +67,6 @@ status_t Element<audio_stream_type_t>::set<audio_stream_type_t>(audio_stream_typ
         return BAD_VALUE;
     }
     mVolumeProfile = volumeProfile;
-    ALOGD("%s: 0x%X for Stream %s", __FUNCTION__, mVolumeProfile, getName().c_str());
     return NO_ERROR;
 }
 

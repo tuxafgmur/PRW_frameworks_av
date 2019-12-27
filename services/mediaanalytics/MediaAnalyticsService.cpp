@@ -99,7 +99,6 @@ MediaAnalyticsService::MediaAnalyticsService()
           mDumpProto(MediaAnalyticsItem::PROTO_V1),
           mDumpProtoDefault(MediaAnalyticsItem::PROTO_V1) {
 
-    ALOGD("MediaAnalyticsService created");
 
     mItemsSubmitted = 0;
     mItemsFinalized = 0;
@@ -113,7 +112,6 @@ MediaAnalyticsService::MediaAnalyticsService()
 }
 
 MediaAnalyticsService::~MediaAnalyticsService() {
-        ALOGD("MediaAnalyticsService destroyed");
 
     while (mItems.size() > 0) {
         MediaAnalyticsItem * oitem = *(mItems.begin());
@@ -506,7 +504,6 @@ bool MediaAnalyticsService::contentValid(MediaAnalyticsItem *item, bool isTruste
             }
         }
         if (i == nAllowedKeys) {
-            ALOGD("Ignoring (key): %s", item->toString().c_str());
             return false;
         }
     }

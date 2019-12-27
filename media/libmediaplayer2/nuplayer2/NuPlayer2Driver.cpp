@@ -127,7 +127,6 @@ NuPlayer2Driver::NuPlayer2Driver(pid_t pid, uid_t uid)
       mAtEOS(false),
       mLooping(false),
       mAutoLoop(false) {
-    ALOGD("NuPlayer2Driver(%p) created, clientPid(%d)", this, pid);
     mLooper->setName("NuPlayer2Driver Looper");
     mNuPlayer2Looper->setName("NuPlayer2 Looper");
 
@@ -285,7 +284,6 @@ status_t NuPlayer2Driver::prepareAsync() {
 }
 
 status_t NuPlayer2Driver::start() {
-    ALOGD("start(%p), state is %d, eos is %d", this, mState, mAtEOS);
     Mutex::Autolock autoLock(mLock);
     return start_l();
 }
@@ -321,7 +319,6 @@ status_t NuPlayer2Driver::start_l() {
 }
 
 status_t NuPlayer2Driver::stop() {
-    ALOGD("stop(%p)", this);
     Mutex::Autolock autoLock(mLock);
 
     switch (mState) {
@@ -349,7 +346,6 @@ status_t NuPlayer2Driver::stop() {
 }
 
 status_t NuPlayer2Driver::pause() {
-    ALOGD("pause(%p)", this);
     // The NuPlayerRenderer may get flushed if pause for long enough, e.g. the pause timeout tear
     // down for audio offload mode. If that happens, the NuPlayerRenderer will no longer know the
     // current position. So similar to seekTo, update |mPositionUs| to the pause position by calling
@@ -412,7 +408,6 @@ status_t NuPlayer2Driver::getSyncSettings(AVSyncSettings *sync, float *videoFps)
 }
 
 status_t NuPlayer2Driver::seekTo(int64_t msec, MediaPlayer2SeekMode mode) {
-    ALOGD("seekTo(%p) (%lld ms, %d) at state %d", this, (long long)msec, mode, mState);
     Mutex::Autolock autoLock(mLock);
 
     int64_t seekTimeUs = msec * 1000ll;
@@ -576,7 +571,6 @@ void NuPlayer2Driver::logMetrics(const char *where) {
 }
 
 status_t NuPlayer2Driver::reset() {
-    ALOGD("reset(%p) at state %d", this, mState);
 
     updateMetrics("reset");
     logMetrics("reset");
@@ -737,7 +731,6 @@ status_t NuPlayer2Driver::getMetadata(
 }
 
 void NuPlayer2Driver::notifyResetComplete(int64_t /* srcId */) {
-    ALOGD("notifyResetComplete(%p)", this);
     Mutex::Autolock autoLock(mLock);
 
     CHECK_EQ(mState, STATE_RESET_IN_PROGRESS);
@@ -861,8 +854,6 @@ status_t NuPlayer2Driver::dump(
         }
     }
 
-    ALOGI("%s", logString.c_str());
-
     if (fd >= 0) {
         FILE *out = fdopen(dup(fd), "w");
         fprintf(out, "%s", logString.c_str());
@@ -905,9 +896,6 @@ void NuPlayer2Driver::notifyListener(
 
 void NuPlayer2Driver::notifyListener_l(
         int64_t srcId, int msg, int ext1, int ext2, const Parcel *in) {
-    ALOGD("notifyListener_l(%p), (%lld, %d, %d, %d, %d), loop setting(%d, %d)",
-            this, (long long)srcId, msg, ext1, ext2,
-            (in == NULL ? -1 : (int)in->dataSize()), mAutoLoop, mLooping);
     if (srcId == mSrcId) {
         switch (msg) {
             case MEDIA2_PLAYBACK_COMPLETE:
@@ -919,7 +907,6 @@ void NuPlayer2Driver::notifyListener_l(
                             streamType = mAudioSink->getAudioStreamType();
                         }
                         if (streamType == AUDIO_STREAM_NOTIFICATION) {
-                            ALOGW("disabling auto-loop for notification");
                             mAutoLoop = false;
                         }
                     }

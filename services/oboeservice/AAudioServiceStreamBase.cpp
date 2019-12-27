@@ -51,7 +51,6 @@ AAudioServiceStreamBase::AAudioServiceStreamBase(AAudioService &audioService)
 }
 
 AAudioServiceStreamBase::~AAudioServiceStreamBase() {
-    ALOGD("~AAudioServiceStreamBase() destroying %p", this);
     // If the stream is deleted when OPEN or in use then audio resources will leak.
     // This would indicate an internal error. So we want to find this ASAP.
     LOG_ALWAYS_FATAL_IF(!(getState() == AAUDIO_STREAM_STATE_CLOSED
@@ -295,7 +294,6 @@ aaudio_result_t AAudioServiceStreamBase::flush() {
 
 // implement Runnable, periodically send timestamps to client
 void AAudioServiceStreamBase::run() {
-    ALOGD("%s() %s entering >>>>>>>>>>>>>> TIMESTAMPS", __func__, getTypeText());
     TimestampScheduler timestampScheduler;
     timestampScheduler.setBurstPeriod(mFramesPerBurst, getSampleRate());
     timestampScheduler.start(AudioClock::getNanoseconds());
@@ -313,7 +311,6 @@ void AAudioServiceStreamBase::run() {
             AudioClock::sleepUntilNanoTime(nextTime);
         }
     }
-    ALOGD("%s() %s exiting <<<<<<<<<<<<<< TIMESTAMPS", __func__, getTypeText());
 }
 
 void AAudioServiceStreamBase::disconnect() {

@@ -134,11 +134,9 @@ AAudioClientTracker::unregisterClientStream(pid_t pid,
 
 AAudioClientTracker::NotificationClient::NotificationClient(pid_t pid)
         : mProcessId(pid) {
-    //ALOGD("NotificationClient(%d) created %p\n", pid, this);
 }
 
 AAudioClientTracker::NotificationClient::~NotificationClient() {
-    //ALOGD("~NotificationClient() destroyed %p\n", this);
 }
 
 int32_t AAudioClientTracker::NotificationClient::getStreamCount() {

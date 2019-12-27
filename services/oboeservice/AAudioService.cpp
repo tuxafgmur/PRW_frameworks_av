@@ -132,7 +132,6 @@ aaudio_handle_t AAudioService::openStream(const aaudio::AAudioStreamRequest &req
         return result;
     } else {
         aaudio_handle_t handle = mStreamTracker.addStreamForHandle(serviceStream.get());
-        ALOGD("openStream(): handle = 0x%08X", handle);
         serviceStream->setHandle(handle);
         pid_t pid = request.getProcessId();
         AAudioClientTracker::getInstance().registerClientStream(pid, serviceStream);
@@ -326,7 +325,6 @@ aaudio_result_t AAudioService::stopClient(aaudio_handle_t streamHandle,
 // This is only called internally when AudioFlinger wants to tear down a stream.
 // So we do not have to check permissions.
 aaudio_result_t AAudioService::disconnectStreamByPortHandle(audio_port_handle_t portHandle) {
-    ALOGD("%s(%d) called", __func__, portHandle);
     sp<AAudioServiceStreamBase> serviceStream =
             mStreamTracker.findStreamByPortHandleAndIncrement(portHandle);
     if (serviceStream.get() == nullptr) {

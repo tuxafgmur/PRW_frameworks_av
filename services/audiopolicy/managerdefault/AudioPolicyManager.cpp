@@ -143,8 +143,6 @@ status_t AudioPolicyManager::setDeviceConnectionStateInt(audio_devices_t device,
             if (index >= 0) {
                 sp<HwModule> module = mHwModules.getModuleForDevice(device);
                 if (module == 0) {
-                    ALOGD("setDeviceConnectionState() could not find HW module for device %08x",
-                          device);
                     mAvailableOutputDevices.remove(devDesc);
                     return INVALID_OPERATION;
                 }
@@ -5971,7 +5969,6 @@ void AudioPolicyManager::filterSurroundFormats(FormatVector *formatsPtr) {
 
     audio_policy_forced_cfg_t forceUse = mEngine->getForceUse(
             AUDIO_POLICY_FORCE_FOR_ENCODED_SURROUND);
-    ALOGD("%s: forced use = %d", __FUNCTION__, forceUse);
 
     // If MANUAL, keep the supported surround sound formats as current enabled ones.
     if (forceUse == AUDIO_POLICY_FORCE_ENCODED_SURROUND_MANUAL) {

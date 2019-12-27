@@ -28,8 +28,8 @@
 
 namespace android {
 
-#define LOG1(...) ALOGD_IF(gLogLevel >= 1, __VA_ARGS__);
-#define LOG2(...) ALOGD_IF(gLogLevel >= 2, __VA_ARGS__);
+#define LOG1(...)
+#define LOG2(...)
 
 static int getCallingPid() {
     return IPCThreadState::self()->getCallingPid();
@@ -45,7 +45,6 @@ CameraClient::CameraClient(const sp<CameraService>& cameraService,
                 String8::format("%d", cameraId), cameraId, cameraFacing, clientPid,
                 clientUid, servicePid)
 {
-    int callingPid = getCallingPid();
     LOG1("CameraClient::CameraClient E (pid %d, id %d)", callingPid, cameraId);
 
     mHardware = NULL;
@@ -67,7 +66,6 @@ CameraClient::CameraClient(const sp<CameraService>& cameraService,
 
 status_t CameraClient::initialize(sp<CameraProviderManager> manager,
         const String8& /*monitorTags*/) {
-    int callingPid = getCallingPid();
     status_t res;
 
     LOG1("CameraClient::initialize E (pid %d, id %d)", callingPid, mCameraId);
@@ -108,7 +106,6 @@ status_t CameraClient::initialize(sp<CameraProviderManager> manager,
 // tear down the client
 CameraClient::~CameraClient() {
     mDestructionStarted = true;
-    int callingPid = getCallingPid();
     LOG1("CameraClient::~CameraClient E (pid %d, this %p)", callingPid, this);
 
     disconnect();
@@ -185,7 +182,6 @@ status_t CameraClient::lock() {
 }
 
 status_t CameraClient::unlock() {
-    int callingPid = getCallingPid();
     LOG1("unlock (pid %d)", callingPid);
     Mutex::Autolock lock(mLock);
 

@@ -144,7 +144,6 @@ status_t NuPlayer2::DecoderPassThrough::dequeueAccessUnit(sp<ABuffer> *accessUni
             mPendingAudioErr = err;
             mPendingAudioAccessUnit = *accessUnit;
             (*accessUnit).clear();
-            ALOGD("return aggregated buffer and save err(=%d) for later", err);
             err = OK;
         }
     }
@@ -235,9 +234,6 @@ status_t NuPlayer2::DecoderPassThrough::fetchInputData(sp<AMessage> &reply) {
                 bool timeChange =
                         (type & ATSParser::DISCONTINUITY_TIME) != 0;
 
-                ALOGI("audio discontinuity (formatChange=%d, time=%d)",
-                        formatChange, timeChange);
-
                 if (formatChange || timeChange) {
                     sp<AMessage> msg = mNotify->dup();
                     msg->setInt32("what", kWhatInputDiscontinuity);
@@ -308,8 +304,6 @@ void NuPlayer2::DecoderPassThrough::onInputBufferFetched(
         int64_t resumeAtMediaTimeUs;
         if (extra->findInt64(
                     "resume-at-mediatimeUs", &resumeAtMediaTimeUs)) {
-            ALOGI("[%s] suppressing rendering until %lld us",
-                    mComponentName.c_str(), (long long)resumeAtMediaTimeUs);
             mSkipRenderingUntilMediaTimeUs = resumeAtMediaTimeUs;
         }
     }

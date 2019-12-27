@@ -57,7 +57,6 @@ aaudio_result_t AAudioServiceEndpointCapture::open(const aaudio::AAudioStreamReq
 
 // Read data from the shared MMAP stream and then distribute it to the client streams.
 void *AAudioServiceEndpointCapture::callbackLoop() {
-    ALOGD("callbackLoop() entering");
     aaudio_result_t result = AAUDIO_OK;
     int64_t timeoutNanos = getStreamInternal()->calculateReasonableTimeout();
 
@@ -125,6 +124,5 @@ void *AAudioServiceEndpointCapture::callbackLoop() {
         }
     }
 
-    ALOGD("callbackLoop() exiting");
     return NULL; // TODO review
 }

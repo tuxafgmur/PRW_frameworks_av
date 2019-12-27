@@ -113,12 +113,10 @@ public:
 
     virtual aaudio_result_t startClient(const android::AudioClient& client __unused,
                                         audio_port_handle_t *clientHandle __unused) {
-        ALOGD("AAudioServiceStreamBase::startClient(%p, ...) AAUDIO_ERROR_UNAVAILABLE", &client);
         return AAUDIO_ERROR_UNAVAILABLE;
     }
 
     virtual aaudio_result_t stopClient(audio_port_handle_t clientHandle __unused) {
-        ALOGD("AAudioServiceStreamBase::stopClient(%d) AAUDIO_ERROR_UNAVAILABLE", clientHandle);
         return AAUDIO_ERROR_UNAVAILABLE;
     }
 

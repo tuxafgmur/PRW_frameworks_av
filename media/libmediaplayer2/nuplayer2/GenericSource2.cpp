@@ -470,7 +470,6 @@ void NuPlayer2::GenericSource2::notifyPreparedAndCleanup(status_t err) {
 
 void NuPlayer2::GenericSource2::start() {
     Mutex::Autolock _l(mLock);
-    ALOGI("start");
 
     if (mAudioTrack.mExtractor != NULL) {
         postReadBuffer(MEDIA_TRACK_TYPE_AUDIO);
@@ -1550,7 +1549,6 @@ status_t NuPlayer2::GenericSource2::prepareDrm(
 
     if (status == OK) {
         ALOGV("prepareDrm: mCrypto: %p", outCrypto->get());
-        ALOGD("prepareDrm ret: %d ", status);
     } else {
         ALOGE("prepareDrm err: %d", status);
     }

@@ -30,7 +30,6 @@ status_t Element<audio_source_t>::setIdentifier(audio_source_t identifier)
         return BAD_VALUE;
     }
     mIdentifier = identifier;
-    ALOGD("%s: InputSource %s identifier 0x%X", __FUNCTION__, getName().c_str(), identifier);
     return NO_ERROR;
 }
 
@@ -54,7 +53,6 @@ status_t Element<audio_source_t>::set(audio_devices_t devices)
               __FUNCTION__, devices, getName().c_str());
         return BAD_VALUE;
     }
-    ALOGD("%s: 0x%X for input source %s", __FUNCTION__, devices, getName().c_str());
     mApplicableDevices = devices;
     return NO_ERROR;
 }

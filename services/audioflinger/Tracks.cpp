@@ -111,8 +111,6 @@ AudioFlinger::ThreadBase::TrackBase::TrackBase(
     // battery usage on it.
     mUid = clientUid;
 
-    // ALOGD("Creating track with %d buffers @ %d bytes", bufferCount, bufferSize);
-
     size_t minBufferSize = buffer == NULL ? roundup(frameCount) : frameCount;
     // check overflow when computing bufferSize due to multiplication by mFrameSize.
     if (minBufferSize < frameCount  // roundup rounds down for values above UINT_MAX / 2
