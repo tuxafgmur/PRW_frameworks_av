@@ -211,9 +211,9 @@ void SoftVideoDecoderOMXComponent::handlePortSettingsChange(
     }
 
     if (formatChanged || sizeChanged || cropChanged || strideChanged) {
-        if (formatChanged) {
-            ALOGD("formatChanged: 0x%08x -> 0x%08x", mOutputFormat, outputFormat);
-        }
+        //if (formatChanged) {
+        //    ALOGD("formatChanged: 0x%08x -> 0x%08x", mOutputFormat, outputFormat);
+        //}
         mOutputFormat = outputFormat;
         mWidth = width;
         mHeight = height;
@@ -389,7 +389,7 @@ OMX_ERRORTYPE SoftVideoDecoderOMXComponent::internalGetParameter(
             }
 
             if (profileLevel->nPortIndex != kInputPortIndex) {
-                ALOGE("Invalid port index: %" PRIu32, profileLevel->nPortIndex);
+                //ALOGE("Invalid port index: %" PRIu32, profileLevel->nPortIndex);
                 return OMX_ErrorUnsupportedIndex;
             }
 
@@ -503,7 +503,7 @@ OMX_ERRORTYPE SoftVideoDecoderOMXComponent::internalSetParameter(
             // not indicate support for 32kx32k video.
             if (newWidth > 32768 || newHeight > 32768
                     || video_def->nStride > 32768 || video_def->nSliceHeight > 32768) {
-                ALOGE("b/22885421");
+                //ALOGE("b/22885421");
                 return OMX_ErrorBadParameter;
             }
             if (newWidth != oldWidth || newHeight != oldHeight) {

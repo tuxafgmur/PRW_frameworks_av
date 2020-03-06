@@ -50,12 +50,15 @@ static const OMX_U32 kPortIndexOutput = 1;
 
 #define CLOGW(fmt, ...) ALOGW("[%p:%s] " fmt, mHandle, mName, ##__VA_ARGS__)
 
-#define CLOG_ERROR_IF(cond, fn, err, fmt, ...) \
-    ALOGE_IF(cond, #fn "(%p:%s, " fmt ") ERROR: %s(%#x)", \
-    mHandle, mName, ##__VA_ARGS__, asString(err), err)
-#define CLOG_ERROR(fn, err, fmt, ...) CLOG_ERROR_IF(true, fn, err, fmt, ##__VA_ARGS__)
-#define CLOG_IF_ERROR(fn, err, fmt, ...) \
-    CLOG_ERROR_IF((err) != OMX_ErrorNone, fn, err, fmt, ##__VA_ARGS__)
+// #define CLOG_ERROR_IF(cond, fn, err, fmt, ...) \
+//     ALOGE_IF(cond, #fn "(%p:%s, " fmt ") ERROR: %s(%#x)", \
+//     mHandle, mName, ##__VA_ARGS__, asString(err), err)
+#define CLOG_ERROR_IF(cond, fn, err, fmt, ...)
+//#define CLOG_ERROR(fn, err, fmt, ...) CLOG_ERROR_IF(true, fn, err, fmt, ##__VA_ARGS__)
+#define CLOG_ERROR(fn, err, fmt, ...)
+// #define CLOG_IF_ERROR(fn, err, fmt, ...) \
+//     CLOG_ERROR_IF((err) != OMX_ErrorNone, fn, err, fmt, ##__VA_ARGS__)
+#define CLOG_IF_ERROR(fn, err, fmt, ...)
 
 #define CLOGI_(level, fn, fmt, ...) \
     ALOGI_IF(DEBUG >= (level), #fn "(%p:%s, " fmt ")", mHandle, mName, ##__VA_ARGS__)
@@ -64,8 +67,10 @@ static const OMX_U32 kPortIndexOutput = 1;
 
 #define CLOG_LIFE(fn, fmt, ...)     CLOGI_(ADebug::kDebugLifeCycle,     fn, fmt, ##__VA_ARGS__)
 #define CLOG_STATE(fn, fmt, ...)    CLOGI_(ADebug::kDebugState,         fn, fmt, ##__VA_ARGS__)
-#define CLOG_CONFIG(fn, fmt, ...)   CLOGI_(ADebug::kDebugConfig,        fn, fmt, ##__VA_ARGS__)
-#define CLOG_INTERNAL(fn, fmt, ...) CLOGD_(ADebug::kDebugInternalState, fn, fmt, ##__VA_ARGS__)
+//#define CLOG_CONFIG(fn, fmt, ...)   CLOGI_(ADebug::kDebugConfig,        fn, fmt, ##__VA_ARGS__)
+#define CLOG_CONFIG(fn, fmt, ...)
+//#define CLOG_INTERNAL(fn, fmt, ...) CLOGD_(ADebug::kDebugInternalState, fn, fmt, ##__VA_ARGS__)
+#define CLOG_INTERNAL(fn, fmt, ...)
 
 #define CLOG_DEBUG_IF(cond, fn, fmt, ...) \
     ALOGD_IF(cond, #fn "(%p, " fmt ")", mHandle, ##__VA_ARGS__)
@@ -609,11 +614,11 @@ status_t OMXNodeInstance::getParameter(
     }
 
     OMX_ERRORTYPE err = OMX_GetParameter(mHandle, index, params);
-    OMX_INDEXEXTTYPE extIndex = (OMX_INDEXEXTTYPE)index;
+    //OMX_INDEXEXTTYPE extIndex = (OMX_INDEXEXTTYPE)index;
     // some errors are expected for getParameter
-    if (err != OMX_ErrorNoMore) {
-        CLOG_IF_ERROR(getParameter, err, "%s(%#x)", asString(extIndex), index);
-    }
+    //if (err != OMX_ErrorNoMore) {
+    //    CLOG_IF_ERROR(getParameter, err, "%s(%#x)", asString(extIndex), index);
+    //}
     return StatusFromOMXError(err);
 }
 
@@ -648,19 +653,19 @@ status_t OMXNodeInstance::getConfig(
     }
 
     OMX_ERRORTYPE err = OMX_GetConfig(mHandle, index, params);
-    OMX_INDEXEXTTYPE extIndex = (OMX_INDEXEXTTYPE)index;
+    //OMX_INDEXEXTTYPE extIndex = (OMX_INDEXEXTTYPE)index;
     // some errors are expected for getConfig
-    if (err != OMX_ErrorNoMore) {
-        CLOG_IF_ERROR(getConfig, err, "%s(%#x)", asString(extIndex), index);
-    }
+    //if (err != OMX_ErrorNoMore) {
+    //    CLOG_IF_ERROR(getConfig, err, "%s(%#x)", asString(extIndex), index);
+    //}
     return StatusFromOMXError(err);
 }
 
 status_t OMXNodeInstance::setConfig(
         OMX_INDEXTYPE index, const void *params, size_t size) {
     Mutex::Autolock autoLock(mLock);
-    OMX_INDEXEXTTYPE extIndex = (OMX_INDEXEXTTYPE)index;
-    CLOG_CONFIG(setConfig, "%s(%#x), %zu@%p)", asString(extIndex), index, size, params);
+    //OMX_INDEXEXTTYPE extIndex = (OMX_INDEXEXTTYPE)index;
+    //CLOG_CONFIG(setConfig, "%s(%#x), %zu@%p)", asString(extIndex), index, size, params);
 
     if (isProhibitedIndex_l(index)) {
         android_errorWriteLog(0x534e4554, "29422020");
@@ -669,7 +674,7 @@ status_t OMXNodeInstance::setConfig(
 
     OMX_ERRORTYPE err = OMX_SetConfig(
             mHandle, index, const_cast<void *>(params));
-    CLOG_IF_ERROR(setConfig, err, "%s(%#x)", asString(extIndex), index);
+    //CLOG_IF_ERROR(setConfig, err, "%s(%#x)", asString(extIndex), index);
     return StatusFromOMXError(err);
 }
 
@@ -677,7 +682,7 @@ status_t OMXNodeInstance::setPortMode(OMX_U32 portIndex, IOMX::PortMode mode) {
     Mutex::Autolock autoLock(mLock);
 
     if (portIndex >= NELEM(mPortMode)) {
-        ALOGE("b/31385713, portIndex(%u)", portIndex);
+        // ALOGE("b/31385713, portIndex(%u)", portIndex);
         android_errorWriteLog(0x534e4554, "31385713");
         return BAD_VALUE;
     }
@@ -799,7 +804,7 @@ status_t OMXNodeInstance::setPortMode(OMX_U32 portIndex, IOMX::PortMode mode) {
 status_t OMXNodeInstance::enableNativeBuffers_l(
         OMX_U32 portIndex, OMX_BOOL graphic, OMX_BOOL enable) {
     if (portIndex >= NELEM(mSecureBufferType)) {
-        ALOGE("b/31385713, portIndex(%u)", portIndex);
+        // ALOGE("b/31385713, portIndex(%u)", portIndex);
         android_errorWriteLog(0x534e4554, "31385713");
         return BAD_VALUE;
     }
@@ -1055,7 +1060,7 @@ status_t OMXNodeInstance::configureVideoTunnelMode(
 status_t OMXNodeInstance::useBuffer(
         OMX_U32 portIndex, const OMXBuffer &omxBuffer, IOMX::buffer_id *buffer) {
     if (buffer == NULL) {
-        ALOGE("b/25884056");
+        // ALOGE("b/25884056");
         return BAD_VALUE;
     }
 
@@ -1065,7 +1070,7 @@ status_t OMXNodeInstance::useBuffer(
 
     Mutex::Autolock autoLock(mLock);
     if (!mSailed) {
-        ALOGE("b/35467458");
+        // ALOGE("b/35467458");
         android_errorWriteLog(0x534e4554, "35467458");
         return BAD_VALUE;
     }
@@ -1116,8 +1121,8 @@ status_t OMXNodeInstance::useBuffer(
             break;
     }
 
-    ALOGE("b/77486542 : bufferType = %d vs. portMode = %d",
-          omxBuffer.mBufferType, mPortMode[portIndex]);
+    // ALOGE("b/77486542 : bufferType = %d vs. portMode = %d",
+    //      omxBuffer.mBufferType, mPortMode[portIndex]);
     android_errorWriteLog(0x534e4554, "77486542");
     return INVALID_OPERATION;
 }
@@ -1131,7 +1136,7 @@ status_t OMXNodeInstance::useBuffer_l(
     bool isMetadata = mMetadataType[portIndex] != kMetadataBufferTypeInvalid;
 
     if (!isMetadata && mGraphicBufferEnabled[portIndex]) {
-        ALOGE("b/62948670");
+        // ALOGE("b/62948670");
         android_errorWriteLog(0x534e4554, "62948670");
         return INVALID_OPERATION;
     }
@@ -1165,7 +1170,7 @@ status_t OMXNodeInstance::useBuffer_l(
     } else {
         // NULL params is allowed only in metadata mode.
         if (paramsPointer == nullptr) {
-            ALOGE("b/25884056");
+            // ALOGE("b/25884056");
             return BAD_VALUE;
         }
         allottedSize = paramsSize;
@@ -1254,7 +1259,7 @@ status_t OMXNodeInstance::useGraphicBuffer2_l(
         OMX_U32 portIndex, const sp<GraphicBuffer>& graphicBuffer,
         IOMX::buffer_id *buffer) {
     if (graphicBuffer == NULL || buffer == NULL) {
-        ALOGE("b/25884056");
+        // ALOGE("b/25884056");
         return BAD_VALUE;
     }
 
@@ -1264,9 +1269,9 @@ status_t OMXNodeInstance::useGraphicBuffer2_l(
     def.nPortIndex = portIndex;
     OMX_ERRORTYPE err = OMX_GetParameter(mHandle, OMX_IndexParamPortDefinition, &def);
     if (err != OMX_ErrorNone) {
-        OMX_INDEXTYPE index = OMX_IndexParamPortDefinition;
-        CLOG_ERROR(getParameter, err, "%s(%#x): %s:%u",
-                asString(index), index, portString(portIndex), portIndex);
+        //OMX_INDEXTYPE index = OMX_IndexParamPortDefinition;
+        //CLOG_ERROR(getParameter, err, "%s(%#x): %s:%u",
+        //        asString(index), index, portString(portIndex), portIndex);
         return UNKNOWN_ERROR;
     }
 
@@ -1310,7 +1315,7 @@ status_t OMXNodeInstance::useGraphicBuffer_l(
         OMX_U32 portIndex, const sp<GraphicBuffer>& graphicBuffer,
         IOMX::buffer_id *buffer) {
     if (graphicBuffer == NULL || buffer == NULL) {
-        ALOGE("b/25884056");
+        // ALOGE("b/25884056");
         return BAD_VALUE;
     }
 
@@ -1323,7 +1328,7 @@ status_t OMXNodeInstance::useGraphicBuffer_l(
 
     if (!mGraphicBufferEnabled[portIndex]) {
         // Report error if this is not in graphic buffer mode.
-        ALOGE("b/62948670");
+        // ALOGE("b/62948670");
         android_errorWriteLog(0x534e4554, "62948670");
         return INVALID_OPERATION;
     }
@@ -1411,7 +1416,7 @@ status_t OMXNodeInstance::updateGraphicBufferInMeta_l(
         IOMX::buffer_id buffer, OMX_BUFFERHEADERTYPE *header) {
     // No need to check |graphicBuffer| since NULL is valid for it as below.
     if (header == NULL) {
-        ALOGE("b/25884056");
+        // ALOGE("b/25884056");
         return BAD_VALUE;
     }
 
@@ -1451,7 +1456,7 @@ status_t OMXNodeInstance::updateNativeHandleInMeta_l(
         IOMX::buffer_id buffer, OMX_BUFFERHEADERTYPE *header) {
     // No need to check |nativeHandle| since NULL is valid for it as below.
     if (header == NULL) {
-        ALOGE("b/25884056");
+        // ALOGE("b/25884056");
         return BAD_VALUE;
     }
 
@@ -1509,9 +1514,9 @@ status_t OMXNodeInstance::setInputSurface(
     OMX_ERRORTYPE oerr = OMX_GetParameter(
             mHandle, OMX_IndexParamPortDefinition, &def);
     if (oerr != OMX_ErrorNone) {
-        OMX_INDEXTYPE index = OMX_IndexParamPortDefinition;
-        CLOG_ERROR(getParameter, oerr, "%s(%#x): %s:%u", asString(index),
-                index, portString(kPortIndexInput), kPortIndexInput);
+        //OMX_INDEXTYPE index = OMX_IndexParamPortDefinition;
+        //CLOG_ERROR(getParameter, oerr, "%s(%#x): %s:%u", asString(index),
+        //        index, portString(kPortIndexInput), kPortIndexInput);
         return UNKNOWN_ERROR;
     }
 
@@ -1538,12 +1543,12 @@ status_t OMXNodeInstance::allocateSecureBuffer(
         OMX_U32 portIndex, size_t size, IOMX::buffer_id *buffer,
         void **buffer_data, sp<NativeHandle> *native_handle) {
     if (buffer == NULL || buffer_data == NULL || native_handle == NULL) {
-        ALOGE("b/25884056");
+        // ALOGE("b/25884056");
         return BAD_VALUE;
     }
 
     if (portIndex >= NELEM(mSecureBufferType)) {
-        ALOGE("b/31385713, portIndex(%u)", portIndex);
+        // ALOGE("b/31385713, portIndex(%u)", portIndex);
         android_errorWriteLog(0x534e4554, "31385713");
         return BAD_VALUE;
     }
@@ -1551,12 +1556,12 @@ status_t OMXNodeInstance::allocateSecureBuffer(
     Mutex::Autolock autoLock(mLock);
 
     if (!mSailed) {
-        ALOGE("b/35467458");
+        // ALOGE("b/35467458");
         android_errorWriteLog(0x534e4554, "35467458");
         return BAD_VALUE;
     }
     if (mPortMode[portIndex] != IOMX::kPortModePresetSecureBuffer) {
-        ALOGE("b/77486542");
+        // ALOGE("b/77486542");
         android_errorWriteLog(0x534e4554, "77486542");
         return INVALID_OPERATION;
     }
@@ -1611,7 +1616,7 @@ status_t OMXNodeInstance::freeBuffer(
 
     OMX_BUFFERHEADERTYPE *header = findBufferHeader(buffer, portIndex);
     if (header == NULL) {
-        ALOGE("b/25884056");
+        // ALOGE("b/25884056");
         return BAD_VALUE;
     }
     BufferMeta *buffer_meta = static_cast<BufferMeta *>(header->pAppPrivate);
@@ -1635,7 +1640,7 @@ status_t OMXNodeInstance::fillBuffer(
 
     OMX_BUFFERHEADERTYPE *header = findBufferHeader(buffer, kPortIndexOutput);
     if (header == NULL) {
-        ALOGE("b/25884056");
+        // ALOGE("b/25884056");
         return BAD_VALUE;
     }
 
@@ -1717,7 +1722,7 @@ status_t OMXNodeInstance::emptyBuffer_l(
 
     OMX_BUFFERHEADERTYPE *header = findBufferHeader(buffer, kPortIndexInput);
     if (header == NULL) {
-        ALOGE("b/25884056");
+        // ALOGE("b/25884056");
         return BAD_VALUE;
     }
     BufferMeta *buffer_meta =
@@ -1861,7 +1866,7 @@ status_t OMXNodeInstance::emptyGraphicBuffer_l(
         OMX_U32 flags, OMX_TICKS timestamp, int fenceFd) {
     OMX_BUFFERHEADERTYPE *header = findBufferHeader(buffer, kPortIndexInput);
     if (header == NULL) {
-        ALOGE("b/25884056");
+        // ALOGE("b/25884056");
         return BAD_VALUE;
     }
 
@@ -1949,7 +1954,7 @@ status_t OMXNodeInstance::emptyNativeHandleBuffer_l(
         OMX_U32 flags, OMX_TICKS timestamp, int fenceFd) {
     OMX_BUFFERHEADERTYPE *header = findBufferHeader(buffer, kPortIndexInput);
     if (header == NULL) {
-        ALOGE("b/25884056");
+        // ALOGE("b/25884056");
         return BAD_VALUE;
     }
 
@@ -2023,7 +2028,7 @@ bool OMXNodeInstance::handleMessage(omx_message &msg) {
         OMX_BUFFERHEADERTYPE *buffer =
             findBufferHeader(msg.u.extended_buffer_data.buffer, kPortIndexOutput);
         if (buffer == NULL) {
-            ALOGE("b/25884056");
+            // ALOGE("b/25884056");
             return false;
         }
 
@@ -2247,7 +2252,7 @@ OMX_ERRORTYPE OMXNodeInstance::OnEvent(
         OMX_IN OMX_U32 nData2,
         OMX_IN OMX_PTR pEventData) {
     if (pAppData == NULL) {
-        ALOGE("b/25884056");
+        // ALOGE("b/25884056");
         return OMX_ErrorBadParameter;
     }
     OMXNodeInstance *instance = static_cast<OMXNodeInstance *>(pAppData);
@@ -2295,7 +2300,7 @@ OMX_ERRORTYPE OMXNodeInstance::OnEmptyBufferDone(
         OMX_IN OMX_PTR pAppData,
         OMX_IN OMX_BUFFERHEADERTYPE* pBuffer) {
     if (pAppData == NULL) {
-        ALOGE("b/25884056");
+        // ALOGE("b/25884056");
         return OMX_ErrorBadParameter;
     }
     OMXNodeInstance *instance = static_cast<OMXNodeInstance *>(pAppData);
@@ -2319,7 +2324,7 @@ OMX_ERRORTYPE OMXNodeInstance::OnFillBufferDone(
         OMX_IN OMX_PTR pAppData,
         OMX_IN OMX_BUFFERHEADERTYPE* pBuffer) {
     if (pAppData == NULL) {
-        ALOGE("b/25884056");
+        // ALOGE("b/25884056");
         return OMX_ErrorBadParameter;
     }
     OMXNodeInstance *instance = static_cast<OMXNodeInstance *>(pAppData);

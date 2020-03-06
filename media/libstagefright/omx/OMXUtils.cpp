@@ -216,17 +216,17 @@ bool DescribeDefaultColorFormat(DescribeColorFormat2Params &params) {
         fmt != OMX_COLOR_FormatYUV420SemiPlanar &&
         fmt != OMX_COLOR_FormatYUV420PackedSemiPlanar &&
         fmt != (OMX_COLOR_FORMATTYPE)HAL_PIXEL_FORMAT_YV12) {
-        ALOGW("do not know color format 0x%x = %d", fmt, fmt);
-        if (fmt == OMX_COLOR_FormatYUV420Planar16) {
-            ALOGW("Cannot describe color format OMX_COLOR_FormatYUV420Planar16");
-        }
+        //ALOGW("do not know color format 0x%x = %d", fmt, fmt);
+        //if (fmt == OMX_COLOR_FormatYUV420Planar16) {
+        //    ALOGW("Cannot describe color format OMX_COLOR_FormatYUV420Planar16");
+        //}
         return false;
     }
 
     // TEMPORARY FIX for some vendors that advertise sliceHeight as 0
     if (params.nStride != 0 && params.nSliceHeight == 0) {
-        ALOGW("using sliceHeight=%u instead of what codec advertised (=0)",
-                params.nFrameHeight);
+        //ALOGW("using sliceHeight=%u instead of what codec advertised (=0)",
+        //        params.nFrameHeight);
         params.nSliceHeight = params.nFrameHeight;
     }
 
@@ -235,8 +235,8 @@ bool DescribeDefaultColorFormat(DescribeColorFormat2Params &params) {
     // 32kx32k video.
     if (params.nStride == 0 || params.nSliceHeight == 0
             || params.nStride > 32768 || params.nSliceHeight > 32768) {
-        ALOGW("cannot describe color format 0x%x = %d with stride=%u and sliceHeight=%u",
-                fmt, fmt, params.nStride, params.nSliceHeight);
+        //ALOGW("cannot describe color format 0x%x = %d with stride=%u and sliceHeight=%u",
+        //        fmt, fmt, params.nStride, params.nSliceHeight);
         return false;
     }
 

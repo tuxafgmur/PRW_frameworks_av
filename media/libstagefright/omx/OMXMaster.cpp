@@ -144,7 +144,7 @@ OMX_ERRORTYPE OMXMaster::makeComponentInstance(
         const OMX_CALLBACKTYPE *callbacks,
         OMX_PTR appData,
         OMX_COMPONENTTYPE **component) {
-    ALOGI("makeComponentInstance(%s) in %s process", name, mProcessName);
+    //ALOGI("makeComponentInstance(%s) in %s process", name, mProcessName);
     Mutex::Autolock autoLock(mLock);
 
     *component = NULL;

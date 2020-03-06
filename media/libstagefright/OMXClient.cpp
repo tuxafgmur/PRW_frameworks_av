@@ -55,7 +55,7 @@ status_t OMXClient::connect(const char* name) {
         return NO_INIT;
     }
     mOMX = new utils::LWOmx(tOmx);
-    ALOGI("IOmx service obtained");
+    //ALOGI("IOmx service obtained");
     return OK;
 }
 

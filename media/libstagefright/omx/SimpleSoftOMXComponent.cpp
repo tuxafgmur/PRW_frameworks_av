@@ -215,7 +215,7 @@ OMX_ERRORTYPE SimpleSoftOMXComponent::useBuffer(
 
     PortInfo *port = &mPorts.editItemAt(portIndex);
     if (size < port->mDef.nBufferSize) {
-        ALOGE("b/63522430, Buffer size is too small.");
+        //ALOGE("b/63522430, Buffer size is too small.");
         android_errorWriteLog(0x534e4554, "63522430");
         return OMX_ErrorBadParameter;
     }
@@ -459,8 +459,8 @@ void SimpleSoftOMXComponent::onChangeState(OMX_STATETYPE state) {
     }
 
     if (mState != mTargetState) {
-        ALOGE("State change to state %d requested while still transitioning from state %d to %d",
-                state, mState, mTargetState);
+        //ALOGE("State change to state %d requested while still transitioning from state %d to %d",
+        //        state, mState, mTargetState);
         notify(OMX_EventError, OMX_ErrorUndefined, 0, NULL);
         return;
     }
@@ -506,7 +506,7 @@ void SimpleSoftOMXComponent::onPortEnable(OMX_U32 portIndex, bool enable) {
     CHECK(port->mDef.bEnabled == !enable);
 
     if (port->mDef.eDir != OMX_DirOutput) {
-        ALOGE("Port enable/disable allowed only on output ports.");
+        //ALOGE("Port enable/disable allowed only on output ports.");
         notify(OMX_EventError, OMX_ErrorUndefined, 0, NULL);
         android_errorWriteLog(0x534e4554, "29421804");
         return;
